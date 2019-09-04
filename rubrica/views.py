@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Q
-from .models import Rubrica,Campo,Usuario
+from .models import Rubrica,Usuario
 from .serializers import RubricaSerializer,UsuarioSerializer
 #REST_FRAMEWORK
 from rest_framework import viewsets, status
