@@ -18,6 +18,22 @@ GET, POST, PUT, DELETE
 class RubricaView(viewsets.ModelViewSet):
     queryset = Rubrica.objects.all() #obtener los datos de esa tabla en objetos
     serializer_class = RubricaSerializer
+    # def list(self,request,*args, **kwargs):
+    #     usuario_list = Usuario.objects.all() 
+    #     query = request.META['QUERY_STRING']
+    #     if query:
+    #         campo = query[:query.index('=')]
+    #         param = request.GET.get(campo)   
+    #         if param and campo in campos:
+    #             if campo == "usuario":
+    #                 queryset = usuario_list.filter(Q(usuario=param))
+    #         else:
+    #             content = {"status_code": 404, "detail": "Param not found."}
+    #             return Response(content, status=status.HTTP_404_NOT_FOUND)
+    #     else: 
+    #         queryset = usuario_list
+    #     serializer = UsuarioSerializer(queryset,many=True)
+    #     return Response(serializer.data)
 
 class UsuarioView(viewsets.ViewSet):
     queryset = Usuario.objects.all()

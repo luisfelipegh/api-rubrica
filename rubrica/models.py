@@ -24,7 +24,6 @@ class Rubrica(models.Model):
     nombre =  models.CharField(max_length=50,default='')
     semestre = models.IntegerField(default=getSemester(datetime.now())) 
     json = jsonfield.JSONField()
-    usuario = models.ForeignKey(Usuario,on_delete=models.CASCADE)
 
 
     
