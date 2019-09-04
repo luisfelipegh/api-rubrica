@@ -11,7 +11,7 @@ GET POST PUT DELETE  sobre el parametro unico y por defecto de Django  id
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ('id','url','cedula','nombre','username') #id and url are default parameters from django 
+        fields = ('id','url','cedula','nombre','correo') #id and url are default parameters from django 
         # fields ="__all__"
 
         
