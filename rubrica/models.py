@@ -13,15 +13,15 @@ def getSemester(now):
     year,month = now.year,now.month
     return str(year)+"2" if month>6 else str(year)+"1"
 
-class Usuario(models.Model):
-    username = models.CharField(max_length=20)  
-    cedula = models.IntegerField(max_length=11)
-    nombre = models.CharField(max_length=50)
+class Usuario(models.Model): 
+    cedula = models.IntegerField(default=0)
+    nombre = models.CharField(max_length=50,default='')
+    correo = models.EmailField(primary_key=True)
     def __str__(self):
         return self.username
 
 class Rubrica(models.Model):
-    nombre =  models.CharField(max_length=50)
+    nombre =  models.CharField(max_length=50,default='')
     semestre = models.IntegerField(default=getSemester(datetime.now())) 
     json = jsonfield.JSONField()
     usuario = models.ForeignKey(Usuario,on_delete=models.CASCADE)
