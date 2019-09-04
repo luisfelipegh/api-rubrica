@@ -11,10 +11,8 @@ router.register('auth',views.RubricaView)
 
 
 router.register('usuarios',views.UsuarioView, base_name='usuario')
-
 router.register('rubricas',views.RubricaView)
 
-router.register('campos',views.CampoView)
 
 urlpatterns = [
      path('',include(router.urls))

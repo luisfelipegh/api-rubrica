@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q
 from .models import Rubrica,Campo,Usuario
-from .serializers import RubricaSerializer,CampoSerializer,UsuarioSerializer
+from .serializers import RubricaSerializer,UsuarioSerializer
 #REST_FRAMEWORK
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -18,11 +18,6 @@ GET, POST, PUT, DELETE
 class RubricaView(viewsets.ModelViewSet):
     queryset = Rubrica.objects.all() #obtener los datos de esa tabla en objetos
     serializer_class = RubricaSerializer
-
-class CampoView(viewsets.ModelViewSet):
-    queryset = Campo.objects.all() #obtener los datos de esa tabla en objetos
-    serializer_class = CampoSerializer
-
 
 class UsuarioView(viewsets.ViewSet):
     queryset = Usuario.objects.all()
@@ -53,89 +48,3 @@ class UsuarioView(viewsets.ViewSet):
             queryset = usuario_list
         serializer = UsuarioSerializer(queryset,many=True)
         return Response(serializer.data)
-
-    # @action(methods=['GET'],detail=False)
-    # def username(self,request):
-    #     usuario_list = Usuario.objects.all()
-    #     param = request.GET.get("param")
-    #     if param:
-    #         queryset = usuario_list.filter(Q(username=param))
-    #     else:
-    #         queryset = usuario_list
-    #     serializer = UsuarioSerializer(queryset,many=True)
-    #     return Response(serializer.data)
-
-    # @action(methods=['GET'],detail=False)
-    # def cod(self,request):
-    #     usuario_list = Usuario.objects.all()
-    #     param = request.GET.get("param")
-    #     if param:
-    #         queryset = usuario_list.filter(Q(cod=param))
-    #     else:
-    #         queryset = usuario_list
-    #     serializer = UsuarioSerializer(queryset,many=True)
-    #     return Response(serializer.data)
-
-'''
-# Django nos provee vistas por defecto para los metodos genrales sobre el campo id
-class UsuarioView(viewsets.ModelViewSet):
-    queryset = Usuario.objects.all() #obtener los datos de esa tabla en objetos
-    serializer_class = UsuarioSerializer
-''' 
-
-'''
-# views.APIView
-# para definir vistas desde 0 como el dev las quiera 
-class UsuarioView(APIView):
-    #get, post, put, delete
-    def get(self, request):
-        queryset = Usuario.objects.all()
-        serializer = UsuarioSerializer(queryset,many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        pass
-'''
-
-'''
-# viewsest.ViewSet
-# para definir vistas desde 0 como el dev las quiera 
-class UsuarioView(viewsets.ViewSet):
-    #List, create, retrieve, update, partial_update, destroy
-    def list(self, request):
-        queryset = Usuario.objects.all()
-        serializer = UsuarioSerializer(queryset,many=True)
-        return Response(serializer.data)
-'''
-
-
-'''
-#viewsets.ModelViewSet
-# para utilizar tanto la ayuda de django como especificar los metodos propios
-# Obtener parametros
-class UsuarioView(viewsets.ModelViewSet):
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
-    #?search=param
-    #para buscar si contiene en fields
-    #?ordering=-param
-    #para ordenar por un field  
-    filter_backends = [SearchFilter,OrderingFilter]
-    search_fields = ['username','cod']
-
-    @action(methods=['GET'],detail=False)
-    def username(self,request, *args, **kwargs):
-        usuario_list = Usuario.objects.all()
-        param = request.GET.get("username")
-        if param:
-            queryset = usuario_list.filter(Q(username=param))
-        else: 
-            queryset = usuario_list
-        serializer = UsuarioSerializer(queryset,many=True)
-        return Response(serializer.data)
-
-'''
-
-
-
- 

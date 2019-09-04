@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Rubrica,Campo,Usuario
+from .models import Rubrica,Usuario
 '''
 Los serializers se utilizan para devolver los modelos 
 en formato que se pueda enviar por http en este caso 
@@ -11,16 +11,11 @@ GET POST PUT DELETE  sobre el parametro unico y por defecto de Django  id
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        # fields = ('id','url','cod','username') #id and url are default parameters from django 
-        fields ="__all__"
+        fields = ('id','url','cedula','nombre','username') #id and url are default parameters from django 
+        # fields ="__all__"
 
         
 class RubricaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rubrica
-        fields = ('id','url','semestre','campos') 
-
-class CampoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Campo
-        fields = ('id','url','nombre','porcentaje') 
+        fields = ('id','url','semestre','json','nombre') 
