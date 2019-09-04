@@ -133,7 +133,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
         # 'rest_framework.permissions.DjangoModelPermissions', #para protejer los permisos a endpoints 
         'rest_framework.authentication.IsAuthenticated',
-        )
+        ),
     #Auth
     'DEFAULT_AUTHENTICATION_CLASSES':( 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
