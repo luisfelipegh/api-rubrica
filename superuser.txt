@@ -1,4 +1,0 @@
-Username: admin
-Email address: juaneschrome@gmail.com
-Password: admin
-Password (again): admin
