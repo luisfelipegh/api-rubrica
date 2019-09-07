@@ -39,4 +39,18 @@ router.post('/', (req, res) => {
   }
 });
 
+//DELETE usuario
+router.delete('/:id', (req, res) => {
+  let id = req.params.id;
+  Rubrica.destroy({
+    where: {id: id}
+  })
+  .then(()=>{
+    res.send({info:'Rubrica Eliminada'})
+  })
+  .catch(err => {
+    res.status(400).send({error: err })
+  })  
+});
+
 module.exports = router

@@ -15,7 +15,7 @@ router.post('/',(req, res)=>{
     if(usuario){
       //CREAR Y ENVIAR TOKEN
       let token = jwt.sign({
-        data: usuario
+      data: usuario
       }, 'rubrica', { expiresIn: '1h' });
 
       res.send({token:token, user:usuario})
@@ -25,7 +25,7 @@ router.post('/',(req, res)=>{
   })
   .catch(err => {
     var error = err
-    res.status(400).send({error: ''+error })
+    res.status(400).send({error: ''+ error })
   }) 
 })
 

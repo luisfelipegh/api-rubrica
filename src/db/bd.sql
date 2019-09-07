@@ -15,20 +15,30 @@ ALTER TABLE public.usuarios
 
 
 --Rubricas
-CREATE TABLE public.rubricas
-(
-    nombre character varying(100) NOT NULL,
-    semestre numeric(5) NOT NULL,
-    creador character varying(100),
-    PRIMARY KEY (nombre, semestre, creador),
-    CONSTRAINT creador FOREIGN KEY (creador)
-        REFERENCES public.usuarios (correo) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-)
-WITH (
-    OIDS = FALSE
-);
+BEGIN;
 
-ALTER TABLE public.rubricas
-    OWNER to postgres;
+-- CREATE TABLE "rubricas" -------------------------------------
+CREATE TABLE "public"."rubricas" ( 
+	"nombre" Character Varying( 100 ) NOT NULL,
+	"semestre" Numeric( 5, 0 ) NOT NULL,
+	"creador" Character Varying( 100 ) NOT NULL,
+	"json" JSONB NOT NULL,
+	"id" Integer DEFAULT nextval('rubricas_id_seq'::regclass) NOT NULL,
+	PRIMARY KEY ( "nombre", "semestre", "creador" ),
+	CONSTRAINT "unique_rubricas_id" UNIQUE( "id" ) );
+ ;
+-- -------------------------------------------------------------
+
+COMMIT;
+
+BEGIN;
+
+-- CREATE LINK "creador" ---------------------------------------
+ALTER TABLE "public"."rubricas"
+	ADD CONSTRAINT "creador" FOREIGN KEY ( "creador" )
+	REFERENCES "public"."usuarios" ( "correo" ) MATCH SIMPLE
+	ON DELETE Cascade
+	ON UPDATE Cascade;
+-- -------------------------------------------------------------
+
+COMMIT;

@@ -4,9 +4,14 @@ const db = require('../db/db');
 var Rubrica = db.sequelize.define(
     'rubricas',
     {
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         semestre:{
             type: Sequelize.STRING,
-            primaryKey: true ,
+            primaryKey: false ,
             allowNull: false,
         },
         json:{
