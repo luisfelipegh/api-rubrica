@@ -11,12 +11,12 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5
 
 //NO TOKEN ROUTES
 let vs = '/api/v1'
-const routes = require("./routes");
+const routes = require("./routes/routes");
 app.use(vs,routes);
 
 
 //TOKEN ROUTES
-const tokenRoutes = require("./tokenRoutes");
+const tokenRoutes = require("./routes/tokenRoutes");
 app.use(vs, verifyToken ,tokenRoutes);
 
 //JWT
