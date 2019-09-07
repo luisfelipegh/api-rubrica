@@ -9,15 +9,21 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 //LOGIN
-var login = require("./controllers/login")
-app.post('/api/login',(req,res)=>{
-  login.login(req,res)
-})
+// var login = require("./controllers/login")
+// app.post('/api/login',(req,res)=>{
+//   login.login(req,res)
+// })
 
-//ROUTES
-let vs = '/api'
+
+//NO TOKEN ROUTES
+let vs = '/api/v1'
 const routes = require("./routes");
-app.use(vs, verifyToken ,routes);
+app.use(vs,routes);
+
+
+//TOKEN ROUTES
+const tokenRoutes = require("./tokenRoutes");
+app.use(vs, verifyToken ,tokenRoutes);
 
 //JWT
 function verifyToken(req, res, next) {

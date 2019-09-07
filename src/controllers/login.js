@@ -1,7 +1,10 @@
+const express = require("express");
+const router = express.Router();
 const jwt = require('jsonwebtoken');
 var Usuario = require('../models/Usuario')
 
-exports.login = function (req, res){
+
+router.post('/',(req, res)=>{
   if (!req.body)
     return res.status(400).send({ success: false, message: "Bad Request", info: null })
   let {correo, contrasena} = req.body;
@@ -23,4 +26,6 @@ exports.login = function (req, res){
     var error = err
     res.status(400).send({error: ''+error })
   }) 
-}
+})
+
+module.exports = router
