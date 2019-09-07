@@ -25,4 +25,18 @@ router.get('/:semestre', (req, res) => {
   })
 });
 
+router.post('/', (req, res) => {
+  if (!req.body){
+    return res.status(400).send({ success: false, message: "Bad Request", info: null })
+  }else{
+    Rubrica.create(req.body)
+    .then(data=> {
+      res.send(data)
+    })
+    .catch(err => {
+      res.status(400).send({error: err })
+    })  
+  }
+});
+
 module.exports = router
