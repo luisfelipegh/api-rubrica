@@ -17,7 +17,8 @@ router.post('/',(req, res)=>{
       let token = jwt.sign({
         data: usuario
       }, 'rubrica', { expiresIn: '1h' });
-      res.send({token})
+
+      res.send({token:token, user:usuario})
     }else{
       res.status(400).send({error: 'Usuario invalido' })
     }
