@@ -8,12 +8,6 @@ app.use(cors({origin: '*' }))
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
-//LOGIN
-// var login = require("./controllers/login")
-// app.post('/api/login',(req,res)=>{
-//   login.login(req,res)
-// })
-
 
 //NO TOKEN ROUTES
 let vs = '/api/v1'
