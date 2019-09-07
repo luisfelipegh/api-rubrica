@@ -1,32 +1,30 @@
 var express = require('express')
 var router = express.Router()
-var Usuario = require('../models/Usuario')
+var Grupos = require('../models/Grupos')
 
 //GET usuarios
 router.get('/', (req, res) => {
-  Usuario.findAll()
-  .then(usuarios => {
-    res.send(usuarios)
+  Grupos.findAll()
+  .then(grupos => {
+    res.send(grupos)
   })
   .catch(err => {
     res.status(400).sendStatus({error: err })
   })
 });
 
-
-//GET usuario
-router.get('/:correo', (req, res) => {
-  let mail = req.params.correo;
-  Usuario.findOne({
+router.get('/:id', (req, res) => {
+  let id = req.params.id;
+  Grupos.findOne({
     where:{
-      correo: mail
+      id: id
     }
   })
-  .then(usuario =>{
-    if(usuario){
-      res.send(usuario)
+  .then(grupos =>{
+    if(grupo){
+      res.send(grupo)
     }else{
-      res.status(400).sendStatus({error: 'Usuario invalido' })
+      res.status(400).sendStatus({error: 'Grupo invalido' })
     }
   })
   .catch(err => {
@@ -34,13 +32,11 @@ router.get('/:correo', (req, res) => {
   })  
 });
 
-
-//POST new usuario
 router.post('/', (req, res) => {
   if (!req.body){
     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
   }else{
-    Usuario.create(req.body)
+    Grupos.create(req.body)
     .then(data=> {
       res.send(data)
     })
@@ -51,37 +47,41 @@ router.post('/', (req, res) => {
 });
 
 //DELETE usuario
-router.delete('/:correo', (req, res) => {
-  let mail = req.params.correo;
-  Usuario.destroy({
-    where: {correo: mail}
+router.delete('/:id', (req, res) => {
+  let id = req.params.id;
+  Grupos.destroy({
+    where: {id: id}
   })
   .then(()=>{
-    res.send({info:'usuario Eliminado'})
+    res.send({info:'Grupo Eliminado'})
   })
   .catch(err => {
     res.status(400).send({error: err })
   })  
 });
 
-//PUT usuario
-router.put('/:correo',(req,res)=>{
-  let mail  = req.params.correo;
-  if (!req.body){
-    return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
-  }else{
-    Usuario.update(req.body, {
-      where: {correo: mail}
-    })
-    .then(() => {
-      res.json({status: 'Usuario actualizado'})
-    })
-    .catch(err => {
-      res.status(400).send({error: err })
-    })  
-  }
-})
+// //PUT usuario
+// router.put('/:codigo',(req,res)=>{
+//   let codigo  = req.params.codigo;
+//   if (!req.body){
+//     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
+//   }else{
+//     Grupos.update(req.body, {
+//       where: {codigo: codigo}
+//     })
+//     .then(() => {
+//       res.json({status: 'Usuario actualizado'})
+//     })
+//     .catch(err => {
+//       res.status(400).send({error: err })
+//     })  
+//   }
+// })
 
+
+
+
+////--------------------------------------------------------------------
 //WITHOUT SEQUELIZE
 // //GET usuario by Id
 // router.get('/:identificacion', (req, res) => {

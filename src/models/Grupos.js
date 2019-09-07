@@ -1,15 +1,19 @@
 const Sequelize = require('sequelize');
 const db = require('../db/db');
 
-var Usuario = db.sequelize.define(
-    'usuarios',
+var Grupos = db.sequelize.define(
+    'grupos',
     {
-        correo:{
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+        },
+        codigo:{
             type: Sequelize.STRING,
             primaryKey: true ,
             allowNull: false,
         },
-        contrasena:{
+        semestre:{
             type: Sequelize.STRING,
             allowNull: false,
         },
@@ -17,8 +21,13 @@ var Usuario = db.sequelize.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
-        tipo:{
+        profesor:{
+            primaryKey: true ,
             type: Sequelize.STRING,
+            references: {
+                model: "Usuario",
+                key: "correo"
+              },
             allowNull: false,
         },
     },
@@ -26,7 +35,7 @@ var Usuario = db.sequelize.define(
     {timestamps: false}
 )
 
-module.exports = Usuario;
+module.exports = Grupos;
 
 //PROPETIES OF A COLUMN  
 // type: Sequelize.DATE STRING TEXT INTEGER,
