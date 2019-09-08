@@ -60,23 +60,23 @@ router.delete('/:id', (req, res) => {
   })  
 });
 
-// //PUT usuario
-// router.put('/:codigo',(req,res)=>{
-//   let codigo  = req.params.codigo;
-//   if (!req.body){
-//     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
-//   }else{
-//     Grupos.update(req.body, {
-//       where: {codigo: codigo}
-//     })
-//     .then(() => {
-//       res.json({status: 'Usuario actualizado'})
-//     })
-//     .catch(err => {
-//       res.status(400).send({error: err })
-//     })  
-//   }
-// })
+//PUT usuario
+router.put('/:id',(req,res)=>{
+  let id  = req.params.id;
+  if (!req.body){
+    return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
+  }else{
+    Grupos.update(req.body, {
+      where: {id: id}
+    })
+    .then(() => {
+      res.send({info:'Grupo Actualizado'})
+    })
+    .catch(err => {
+      res.status(400).send({error: err })
+    })  
+  }
+})
 
 
 
