@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
       id: id
     }
   })
-  .then(grupos =>{
+  .then(grupo =>{
     if(grupo){
       res.send(grupo)
     }else{

@@ -1,4 +1,6 @@
 const fs = require("fs");
+var Grupos = require('../models/Grupos')
+
 module.exports = {
   Reader: function(logger) {
     return new Files(logger);
@@ -10,11 +12,14 @@ class Files {
   async insertInDatabase(data) {
     let base64File = data.base64.split(";base64,").pop();
     let buff = new Buffer(base64File, 'base64');
-    let text = buff.toString('ascii');
+    let text = buff.toString('utf-8');
     let convert = this.csvJSON(text)
+    console.log(data);
+    
     console.log(convert);
     
-    return `${name}.${ext}`;
+
+
   }
    csvJSON(csv){
 
