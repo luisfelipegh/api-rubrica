@@ -13,13 +13,13 @@ router.get('/', (req, res) => {
     })
 });
 
-router.get('/:grupo/:id', (req, res) => {
-    let id = req.params.id;
+router.get('/:grupo/:codigo', (req, res) => {
+    let cod = req.params.codigo;
     let grupo = req.params.grupo;
     Equipos.findOne({
         where:{
             grupo: grupo,
-            id: id,
+            codigo: cod,
         }
     })
     .then(equipo =>{
@@ -49,13 +49,13 @@ router.post('/', (req, res) => {
 });
 
 //DELETE usuario
-router.delete('/:grupo/:id', (req, res) => {
-  let id = req.params.id;
+router.delete('/:grupo/:codigo', (req, res) => {
+  let cod = req.params.codigo;
   let grupo = req.params.grupo;
   Equipos.destroy({
     where: {
         grupo: grupo,
-        id: id
+        codigo: cod
     }
   })
   .then(()=>{
@@ -67,17 +67,17 @@ router.delete('/:grupo/:id', (req, res) => {
 });
 
 //PUT usuario
-router.put('/:grupo/:id',(req,res)=>{
-  let id  = req.params.id;
+router.put('/:grupo/:codigo',(req,res)=>{
+  let cod  = req.params.codigo;
   let grupo = req.params.grupo;
   if (!req.body){
     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
   }else{
     Equipos.update(req.body, {
       where: {
-          grupo: grupo,
-          id: id
-        }
+        grupo: grupo,
+        codigo: cod
+      }
     })
     .then(() => {
       res.send({info:'Equipo Actualizado'})
@@ -87,8 +87,6 @@ router.put('/:grupo/:id',(req,res)=>{
     })  
   }
 })
-
-
 
 
 module.exports = router

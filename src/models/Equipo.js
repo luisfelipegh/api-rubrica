@@ -4,7 +4,7 @@ const db = require('../db/db');
 var Equipo = db.sequelize.define(
     'equipos',
     {
-        id: {
+        codigo: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true 
