@@ -2,11 +2,10 @@ const Sequelize = require('sequelize');
 const db = require('../db/db');
 
 var Estudiante = db.sequelize.define(
-    'grupos_estudiantes',
+    'estudiantes',
     {
-        id: {
+        semestre: {
             type: Sequelize.INTEGER,
-            autoIncrement: true,
         },
         grupo:{
             primaryKey: true ,

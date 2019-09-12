@@ -45,9 +45,11 @@ router.get('/estudiantes/:id', (req, res) => {
   })
   .then(grupo =>{
     if(grupo){
+      console.log(grupo.codigo,grupo.semestre)
       Estudiantes.findAll({
         where:{
-          grupo: grupo.codigo
+          grupo: grupo.codigo,
+          semestre:  parseInt(grupo.semestre)
         }
       })
       .then(estudiantes => {

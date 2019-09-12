@@ -13,6 +13,43 @@ router.get('/', (req, res) => {
   })
 });
 
+//GET estudiantes
+router.get('/estudiantes', (req, res) => {
+  Usuario.findAll({
+    where:{
+      tipo: 'estudiante'
+    }
+  })
+  .then(usuarios =>{
+    if(usuarios){
+      res.send(usuarios)
+    }else{
+      res.status(400).sendStatus({error: 'Usuario invalido' })
+    }
+  })
+  .catch(err => {
+    res.status(400).sendStatus({error: err })
+  })  
+});
+
+//GET usuario
+router.get('/profesores', (req, res) => {
+  Usuario.findAll({
+    where:{
+      tipo: 'profesor'
+    }
+  })
+  .then(usuarios =>{
+    if(usuarios){
+      res.send(usuarios)
+    }else{
+      res.status(400).sendStatus({error: 'Usuario invalido' })
+    }
+  })
+  .catch(err => {
+    res.status(400).sendStatus({error: err })
+  })  
+});
 
 //GET usuario
 router.get('/:correo', (req, res) => {
@@ -81,57 +118,5 @@ router.put('/:correo',(req,res)=>{
     })  
   }
 })
-
-//WITHOUT SEQUELIZE
-// //GET usuario by Id
-// router.get('/:identificacion', (req, res) => {
-//   let identificacion = req.params.identificacion;
-//   let usuario = new Usuario();
-//   usuario.selectUsuarioId(identificacion, (response) => {
-//     return res.status(response.status).send(response.response);
-//   });
-// });
-
-// //GET usuarios
-// router.get('/', (req, res) => {
-//   let usuario = new Usuario();
-//   usuario.selectUsuarios((response) => {
-//     return res.status(response.status).send(response.response);
-//   });
-// });
-
-// //POST new usuario
-// router.post('/', (req, res) => {
-//   if (!req.body)
-//     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
-//   let data = req.body;
-//   let usuario = new Usuario();
-//   usuario.insertUsuario(data, (response) => {
-//     return res.status(response.status).send(response.response);
-//   });
-// });
-
-// //PUT usuario
-// router.put('/:identificacion', (req, res) => {
-//   if (!req.body)
-//     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
-//   let identificacion = req.params.identificacion;
-//   let data = req.body;
-//   let usuario = new Usuario();
-//   usuario.updateUsuario(identificacion, data, (response) => {
-//     return res.status(response.status).send(response.response);
-//   });
-// });
-
-// //DELETE usuario
-// router.delete('/:identificacion', (req, res) => {
-//   if (!req.body)
-//     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
-//   let identificacion = req.params.identificacion;
-//   let usuario = new Usuario();
-//   usuario.deleteUsuario(identificacion, (response) => {
-//     return res.status(response.status).send(response.response);
-//   });
-// });
 
 module.exports = router
