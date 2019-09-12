@@ -1,8 +1,10 @@
 var express = require('express')
 var router = express.Router()
 var Grupos = require('../models/Grupo')
+var Estudiantes = require('../models/Estudiante')
+var Usuario = require('../models/Usuario')
 
-//GET usuarios
+//GET grupos
 router.get('/', (req, res) => {
   Grupos.findAll()
   .then(grupos => {
@@ -13,6 +15,7 @@ router.get('/', (req, res) => {
   })
 });
 
+//GET by id
 router.get('/:id', (req, res) => {
   let id = req.params.id;
   Grupos.findOne({
@@ -32,6 +35,58 @@ router.get('/:id', (req, res) => {
   })  
 });
 
+//GET estudiantes 
+router.get('/estudiantes/:id', (req, res) => {
+  let id = req.params.id;
+  Grupos.findOne({
+    where:{
+      id: id
+    }
+  })
+  .then(grupo =>{
+    if(grupo){
+      Estudiantes.findAll({
+        where:{
+          grupo: grupo.codigo
+        }
+      })
+      .then(estudiantes => {
+        res.send(estudiantes)
+      })
+      .catch(err => {
+        res.status(400).sendStatus({error: err })
+      })
+
+    }else{
+      res.status(400).sendStatus({error: 'Grupo invalido' })
+    }
+  })
+  .catch(err => {
+    res.status(400).sendStatus({error: err })
+  })  
+});
+
+//GET grupos profesor  
+router.get('/profesor/:correo', (req, res) => {
+  let correo = req.params.correo;
+  Grupos.findAll({
+    where:{
+      profesor : correo
+    }
+  })
+  .then(grupos =>{
+    if(grupos){
+      res.send(grupos)
+    }else{
+      res.status(400).sendStatus({error: 'Grupo invalido' })
+    }
+  })
+  .catch(err => {
+    res.status(400).sendStatus({error: err })
+  })  
+});
+
+//POST one Grupo
 router.post('/', (req, res) => {
   if (!req.body){
     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
@@ -46,7 +101,7 @@ router.post('/', (req, res) => {
   }
 });
 
-//DELETE usuario
+//DELETE Grupo
 router.delete('/:id', (req, res) => {
   let id = req.params.id;
   Grupos.destroy({
@@ -60,7 +115,7 @@ router.delete('/:id', (req, res) => {
   })  
 });
 
-//PUT usuario
+//PUT Grupo
 router.put('/:id',(req,res)=>{
   let id  = req.params.id;
   if (!req.body){
