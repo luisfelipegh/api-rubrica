@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var Grupos = require('../models/Grupos')
+var Grupos = require('../models/Grupo')
 
 //GET usuarios
 router.get('/', (req, res) => {

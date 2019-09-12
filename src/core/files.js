@@ -1,5 +1,5 @@
 const fs = require("fs");
-var Grupos = require('../models/Grupos')
+var Grupos = require('../models/Grupo')
 
 module.exports = {
   Reader: function(logger) {

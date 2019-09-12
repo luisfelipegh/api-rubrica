@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db/db');
 
-var Grupos = db.sequelize.define(
+var Grupo = db.sequelize.define(
     'grupos',
     {
         id: {
@@ -35,7 +35,7 @@ var Grupos = db.sequelize.define(
     {timestamps: false}
 )
 
-module.exports = Grupos;
+module.exports = Grupo;
 
 //PROPETIES OF A COLUMN  
 // type: Sequelize.DATE STRING TEXT INTEGER,
