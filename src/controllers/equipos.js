@@ -52,7 +52,7 @@ router.post('/', (req, res) => {
 router.delete('/:grupo/:id', (req, res) => {
   let id = req.params.id;
   let grupo = req.params.grupo;
-  Grupos.destroy({
+  Equipos.destroy({
     where: {
         grupo: grupo,
         id: id
@@ -73,7 +73,7 @@ router.put('/:grupo/:id',(req,res)=>{
   if (!req.body){
     return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
   }else{
-    Grupos.update(req.body, {
+    Equipos.update(req.body, {
       where: {
           grupo: grupo,
           id: id
