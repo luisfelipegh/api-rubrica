@@ -31,31 +31,37 @@ class Files {
   async insertInDatabaseUsuarios(data) {
     let base64File = data.base64.split(";base64,").pop();
     let buff = new Buffer(base64File, 'base64');
-    let text = buff.toString('utf-8');
+    let text = buff.toString('utf8');
     let convert = this.csvJSON(text)
     let insertados = []
     let no_insertados = []
+    let repetidos = []
     for (let index = 0; index < convert.length; index++) {
       const element = convert[index];
-      let insertar = true
       if (element['EMAIL'] != undefined) {
         let usuario = await Usuario.findOne({where: { correo: element['EMAIL']}})
-        if (usuario == null){
+        if (usuario){
+          repetidos.push(element)
+        }else{
           let info = {
-                  correo: element['EMAIL'],
-                  contrasena: element['EMAIL'],
-                  nombre: element['NOMBRE_ESTUDIANTE'],
-                  tipo: element['TIPO ']
-                }
-          let insert = await Usuario.create(info)
-          console.log(insert);
-          
+                      correo: element['EMAIL'],
+                      contrasena: 'admin',
+                      nombre: element['NOMBRE_ESTUDIANTE'],
+                      tipo: element['TIPO ']
+                    }
+              
+              Usuario.create(info).then(e=>{
+               insertados.push(element)
+              }).catch(e=>{
+                no_insertados.push(element)
+              })
         }
       }
     }
     return {
       no_insertados: no_insertados,
-      insertados: insertados
+      insertados: insertados,
+      repetidos: repetidos
     }
 
 

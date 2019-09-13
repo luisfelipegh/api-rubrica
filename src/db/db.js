@@ -5,7 +5,6 @@ const sequelize = new Sequelize('rubrica','postgres','admin',{
     port: 5432,
     dialect: 'postgres',
     operatorAliases: false,
-
     pool:{
         max:5,
         min:0,
