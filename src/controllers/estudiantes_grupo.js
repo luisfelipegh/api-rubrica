@@ -6,46 +6,19 @@ const db = require('../db/db');
 
 //GET estudiantes
 router.get('/:team', (req, res) => {
-  let equipo = req.params.team;
-  // try{
-    // db.sequelize.query(`select * from estudiantes_equipos e
-    // join estudiantes es
-    // on e.estudiante = es.correo WHERE e.equipo=${equipo}`)
-    //   .then(estudiantesTeam => {
-    //     console.log(estudiantesTeam);
-    //   res.status(200).send(estudiantesTeam)
-    // }).catch(err => {
-    //   res.status(400).sendStatus({
-    //     error: err
-    //   })
-    // })
-    estudiantesTeam.findAll({
-        where: {
-          equipo: equipo
-        }
-      })
-      .then(estudiantesTeam => {
-        if (estudiantesTeam) {
-          res.send(estudiantesTeam)
-        } else {
-          res.status(400).sendStatus({
-            error: 'estudiantesTeam invalido'
-          })
-        }
-      })
-      .catch(err => {
-        res.status(400).sendStatus({
-          error: err
-        })
-      })
-  // }catch(err){
-  //   res.status(400).sendStatus({
-  //     error: err
-  //   })
-  // }
+  let equipo = parseInt(req.params.team);
   
+  db.sequelize.query(`SELECT * FROM estudiantes_equipos as e
+  join usuarios as es
+  on e.estudiante = es.correo WHERE e.equipo=${equipo}`)
+  .then(estudiantes => {
+  res.send(estudiantes[0])
+}).catch(err => {
+  res.status(400).sendStatus({
+    error: err
+  })
+})
 });
-
 
 
 //POST new usuario

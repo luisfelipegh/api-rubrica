@@ -9,8 +9,6 @@ router.post('/grupos', (req, res) => {
   }else{
     filer.insertInDatabaseGrupos(req.body)
     .then(data=> {
-      console.log(data);
-      
       res.send(data)
     })
     .catch(err => {
