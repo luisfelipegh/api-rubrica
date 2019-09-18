@@ -2,136 +2,170 @@ var express = require('express')
 var router = express.Router()
 var Grupos = require('../models/Grupo')
 var Estudiantes = require('../models/Estudiante')
+const Sequelize = require('sequelize');
 var Usuario = require('../models/Usuario')
+const db = require('../db/db');
 
 //GET grupos
 router.get('/', (req, res) => {
   Grupos.findAll()
-  .then(grupos => {
-    res.send(grupos)
-  })
-  .catch(err => {
-    res.status(400).sendStatus({error: err })
-  })
+    .then(grupos => {
+      res.send(grupos)
+    })
+    .catch(err => {
+      res.status(400).sendStatus({
+        error: err
+      })
+    })
 });
 
 //GET by id
 router.get('/:id', (req, res) => {
   let id = req.params.id;
   Grupos.findOne({
-    where:{
-      id: id
-    }
-  })
-  .then(grupo =>{
-    if(grupo){
-      res.send(grupo)
-    }else{
-      res.status(400).sendStatus({error: 'Grupo invalido' })
-    }
-  })
-  .catch(err => {
-    res.status(400).sendStatus({error: err })
-  })  
+      where: {
+        id: id
+      }
+    })
+    .then(grupo => {
+      if (grupo) {
+        res.send(grupo)
+      } else {
+        res.status(400).sendStatus({
+          error: 'Grupo invalido'
+        })
+      }
+    })
+    .catch(err => {
+      res.status(400).sendStatus({
+        error: err
+      })
+    })
 });
 
 //GET estudiantes 
-router.get('/estudiantes/:id', (req, res) => {
+router.get('/estudiantes/:id/:sem', (req, res) => {
   let id = req.params.id;
-  Grupos.findOne({
-    where:{
-      id: id
-    }
-  })
-  .then(grupo =>{
-    if(grupo){
-      console.log(grupo.codigo,grupo.semestre)
-      Estudiantes.findAll({
-        where:{
-          grupo: grupo.codigo,
-          semestre:  parseInt(grupo.semestre)
-        }
-      })
-      .then(estudiantes => {
-        res.send(estudiantes)
-      })
-      .catch(err => {
-        res.status(400).sendStatus({error: err })
-      })
+  let sem = req.params.sem;
 
-    }else{
-      res.status(400).sendStatus({error: 'Grupo invalido' })
-    }
+  db.sequelize.query(`SELECT e.estudiante as correo,e.grupo,e.semestre, u.nombre FROM estudiantes as e
+    join usuarios u 
+    on e.estudiante = u.correo
+    WHERE e.grupo = '${id}' and e.semestre=${sem}`)
+    .then(estudiantes => {
+    res.send(estudiantes[0])
+  }).catch(err => {
+    res.status(400).sendStatus({
+      error: err
+    })
   })
-  .catch(err => {
-    res.status(400).sendStatus({error: err })
-  })  
 });
 
 //GET grupos profesor  
 router.get('/profesor/:correo', (req, res) => {
   let correo = req.params.correo;
   Grupos.findAll({
-    where:{
-      profesor : correo
-    }
-  })
-  .then(grupos =>{
-    if(grupos){
-      res.send(grupos)
-    }else{
-      res.status(400).sendStatus({error: 'Grupo invalido' })
-    }
-  })
-  .catch(err => {
-    res.status(400).sendStatus({error: err })
-  })  
+      where: {
+        profesor: correo
+      }
+    })
+    .then(grupos => {
+      if (grupos) {
+        res.send(grupos)
+      } else {
+        res.status(400).sendStatus({
+          error: 'Grupo invalido'
+        })
+      }
+    })
+    .catch(err => {
+      res.status(400).sendStatus({
+        error: err
+      })
+    })
 });
 
 //POST one Grupo
 router.post('/', (req, res) => {
-  if (!req.body){
-    return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
-  }else{
-    Grupos.create(req.body)
-    .then(data=> {
-      res.send(data)
+  if (!req.body) {
+    return res.status(400).sendStatus({
+      success: false,
+      message: "Bad Request",
+      info: null
     })
-    .catch(err => {
-      res.status(400).send({error: err })
-    })  
+  } else {
+    Grupos.create(req.body)
+      .then(data => {
+        res.send(data)
+      })
+      .catch(err => {
+        res.status(400).send({
+          error: err
+        })
+      })
   }
 });
 
 //DELETE Grupo
+router.delete('/estudiantes/:id/:sem/:correo', (req, res) => {
+  let id = req.params.id;
+  let sem = req.params.sem;
+  let correo = req.params.correo
+  db.sequelize.query(` DELETE FROM estudiantes as e
+    WHERE e.grupo = '${id}' and e.semestre=${sem} and e.estudiante='${correo}'`)
+    .then(estudiantes => {
+    res.send(estudiantes)
+  }).catch(err => {
+    res.status(400).sendStatus({
+      error: err
+    })
+  })
+});
+//DELETE Grupo
 router.delete('/:id', (req, res) => {
   let id = req.params.id;
   Grupos.destroy({
-    where: {id: id}
-  })
-  .then(()=>{
-    res.send({info:'Grupo Eliminado'})
-  })
-  .catch(err => {
-    res.status(400).send({error: err })
-  })  
+      where: {
+        id: id
+      }
+    })
+    .then(() => {
+      res.send({
+        info: 'Grupo Eliminado'
+      })
+    })
+    .catch(err => {
+      res.status(400).send({
+        error: err
+      })
+    })
 });
 
 //PUT Grupo
-router.put('/:id',(req,res)=>{
-  let id  = req.params.id;
-  if (!req.body){
-    return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
-  }else{
+router.put('/:id', (req, res) => {
+  let id = req.params.id;
+  if (!req.body) {
+    return res.status(400).sendStatus({
+      success: false,
+      message: "Bad Request",
+      info: null
+    })
+  } else {
     Grupos.update(req.body, {
-      where: {id: id}
-    })
-    .then(() => {
-      res.send({info:'Grupo Actualizado'})
-    })
-    .catch(err => {
-      res.status(400).send({error: err })
-    })  
+        where: {
+          id: id
+        }
+      })
+      .then(() => {
+        res.send({
+          info: 'Grupo Actualizado'
+        })
+      })
+      .catch(err => {
+        res.status(400).send({
+          error: err
+        })
+      })
   }
 })
 

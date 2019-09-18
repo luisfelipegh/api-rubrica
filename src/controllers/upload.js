@@ -7,11 +7,15 @@ router.post('/grupos', (req, res) => {
   if (!req.body){
     return res.status(400).send({ success: false, message: "Bad Request", info: null })
   }else{
-    filer.insertInDatabase(req.body)
+    filer.insertInDatabaseGrupos(req.body)
     .then(data=> {
+      console.log(data);
+      
       res.send(data)
     })
     .catch(err => {
+      console.log(err);
+      
       res.status(400).send({error: err })
     })  
   }
