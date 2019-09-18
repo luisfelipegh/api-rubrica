@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 router.get('/estudiantes', (req, res) => {
   Usuario.findAll({
     where:{
-      tipo: 'estudiante'
+      tipo: 'ESTUDIANTE'
     }
   })
   .then(usuarios =>{
@@ -36,7 +36,7 @@ router.get('/estudiantes', (req, res) => {
 router.get('/profesores', (req, res) => {
   Usuario.findAll({
     where:{
-      tipo: 'profesor'
+      tipo: 'PROFESOR'
     }
   })
   .then(usuarios =>{
