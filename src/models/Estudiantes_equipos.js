@@ -5,8 +5,6 @@ var EstudianteTeam = db.sequelize.define(
     'estudiantes_equipos',
     {
         equipo: {
-            primaryKey: true ,
-
             type: Sequelize.INTEGER,
             references: {
                 model: "Equipo",
@@ -15,7 +13,6 @@ var EstudianteTeam = db.sequelize.define(
         },
         grupo:{
             primaryKey: true ,
-
             type: Sequelize.STRING,
             allowNull: false,
             references: {
@@ -25,7 +22,6 @@ var EstudianteTeam = db.sequelize.define(
         },
         estudiante:{
             primaryKey: true ,
-
             type: Sequelize.STRING,
             references: {
                 model: "Usuario",
