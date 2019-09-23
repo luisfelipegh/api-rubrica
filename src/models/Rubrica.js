@@ -22,6 +22,10 @@ var Rubrica = db.sequelize.define(
             type: Sequelize.STRING,
             allowNull: false,
         },
+        tipo:{
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
         creador:{
             type: Sequelize.STRING,
             references: {

@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var Rubrica = require('../models/Rubrica')
+const db = require('../db/db');
 
 //GET rubricas
 router.get('/', (req, res) => {
@@ -13,16 +14,34 @@ router.get('/', (req, res) => {
   })
 });
 
-//GET Rubrica by semestre
-router.get('/:semestre', (req, res) => {
-  let sem = req.params.semestre;
-  Rubrica.findOne({
-    semestre: sem
-  }).then(rubrica =>{
-    rubrica ? res.send(rubrica) :  res.status(400).send({error: 'Rubrica no existe' })
-  }).catch(err =>{
-    res.status(400).send({error: err })
+//GET uno
+router.get('/one/:id', (req, res) => {
+  let id = req.params.id;
+  db.sequelize.query(`SELECT r.*, u.nombre nombre_creador , concat( r.nombre,' - ',  u.nombre) as label FROM rubricas as r 
+  join usuarios as u
+  on r.creador = u.correo WHERE r.id='${id}'`)
+  .then(estudiantes => {
+  res.send(estudiantes[0][0])
+}).catch(err => {
+  res.status(400).sendStatus({
+    error: err
   })
+})
+});
+
+//GET Rubrica by semestre
+router.get('/tipo/:tipo', (req, res) => {
+  let tipo = req.params.tipo;
+  db.sequelize.query(`SELECT r.*, u.nombre nombre_creador , concat( r.nombre,' - ',  u.nombre) as label FROM rubricas as r 
+  join usuarios as u
+  on r.creador = u.correo WHERE r.tipo='${tipo}'`)
+  .then(estudiantes => {
+  res.send(estudiantes[0])
+}).catch(err => {
+  res.status(400).sendStatus({
+    error: err
+  })
+})
 });
 
 router.post('/', (req, res) => {
