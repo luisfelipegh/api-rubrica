@@ -9,11 +9,6 @@ var Rubrica = db.sequelize.define(
             autoIncrement: true,
             primaryKey: true
         },
-        semestre:{
-            type: Sequelize.STRING,
-            primaryKey: false ,
-            allowNull: false,
-        },
         json:{
             type: Sequelize.JSONB,
             allowNull: false,
