@@ -57,7 +57,23 @@ router.post('/', (req, res) => {
     })  
   }
 });
-
+//PUT usuario
+router.put('/:id',(req,res)=>{
+  let id  = req.params.id;
+  if (!req.body){
+    return res.status(400).sendStatus({ success: false, message: "Bad Request", info: null })
+  }else{
+    Rubrica.update(req.body, {
+      where: {id: id}
+    })
+    .then(() => {
+      res.json({status: 'Rúbrica actualizado'})
+    })
+    .catch(err => {
+      res.status(400).send({error: err })
+    })  
+  }
+})
 //DELETE usuario
 router.delete('/:id', (req, res) => {
   let id = req.params.id;
