@@ -7,6 +7,7 @@ routes.use("/rubricas", require("../controllers/rubricas"));
 routes.use("/grupos", require("../controllers/grupos"));
 routes.use("/equipos", require("../controllers/equipos"));
 routes.use("/upload", require("../controllers/upload"));
+routes.use("/actividades", require("../controllers/actividades"));
 routes.use("/estudiantesTeam", require("../controllers/estudiantes_grupo"));
 
 

@@ -14,6 +14,34 @@ router.get('/', (req, res) => {
     })
 });
 
+//PUT Grupo
+router.put('/:id', (req, res) => {
+  let id = req.params.id;
+  if (!req.body) {
+    return res.status(400).sendStatus({
+      success: false,
+      message: "Bad Request",
+      info: null
+    })
+  } else {
+    Actividad.update(req.body, {
+        where: {
+          id: id
+        }
+      })
+      .then(() => {
+        res.send({
+          info: 'Actividad Actualizado'
+        })
+      })
+      .catch(err => {
+        res.status(400).send({
+          error: err
+        })
+      })
+  }
+})
+
 //Get creador
 router.get('/creador/:creador', (req, res) => {
     let creator = req.params.usuario;

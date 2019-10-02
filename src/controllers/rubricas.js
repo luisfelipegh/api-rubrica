@@ -43,6 +43,21 @@ router.get('/tipo/:tipo', (req, res) => {
   })
 })
 });
+//GET Rubrica by semestre
+router.get('/tipo/:tipo/:creador', (req, res) => {
+  let tipo = req.params.tipo;
+  let creador = req.params.creador;
+  db.sequelize.query(`SELECT r.*, u.nombre nombre_creador , concat( r.nombre,' - ',  u.nombre) as label FROM rubricas as r 
+  join usuarios as u
+  on r.creador = u.correo WHERE r.tipo='${tipo}' and r.creador='${creador}'`)
+  .then(estudiantes => {
+  res.send(estudiantes[0])
+}).catch(err => {
+  res.status(400).sendStatus({
+    error: err
+  })
+})
+});
 
 router.post('/', (req, res) => {
   if (!req.body){
