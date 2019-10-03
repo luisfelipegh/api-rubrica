@@ -16,7 +16,7 @@ router.post('/',(req, res)=>{
       //CREAR Y ENVIAR TOKEN
       let token = jwt.sign({
       data: usuario
-      }, 'rubrica', { expiresIn: '24h' });
+      }, 'rubrica', { expiresIn: '500d' });
 
       res.send({token:token, user:usuario})
     }else{
