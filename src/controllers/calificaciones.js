@@ -2,7 +2,6 @@ var express = require('express')
 var router = express.Router()
 var Calificacion = require('../models/Calificacion')
 const db = require('../db/db');
-
 //GET Calificaciones
 router.get('/', (req, res) => {
     Calificacion.findAll()
@@ -12,6 +11,42 @@ router.get('/', (req, res) => {
     .catch(err => {
         res.status(400).sendStatus({error: err })
     })
+});
+
+router.get('/misCalificaciones/:correo/:grupo', (req, res) => {
+  let correo = req.params.correo;
+  let grupo = req.params.grupo;
+  db.sequelize.query(`select i.grupo,i.correo,i.tipo ,i.nombre,i.equipo,i.actividad,i.profesor,i.correo_profesor,i.nota,i.calificado, rubrica rubrica
+  from (
+    select  json_array_elements(rubrica->'calificacion'->'estudiantesTeam')->>'correo' correo,
+    json_array_elements(rubrica->'calificacion'->'estudiantesTeam')->>'nombre' nombre, 
+    rubrica->'calificado'->>'nombre' equipo,* from (select c.tipo,c.grupo,ac.nombre actividad, p.nombre profesor,
+                            c.profesor correo_profesor,
+    c.nota nota,c.calificado calificado,c.rubrica rubrica from calificaciones c
+    join actividades ac
+    on c.actividad = ac.id
+    join usuarios p
+    on c.profesor = p.correo
+    where c.tipo='equipo')info
+  )i
+  where correo ='${correo}' and grupo='${grupo}'
+  union all
+  select c.grupo,e.correo, c.tipo,e.nombre,'Individual' equipo,ac.nombre actividad, p.nombre profesor,c.profesor correo_profesor,
+  c.nota nota,c.calificado calificado, c.rubrica from calificaciones c
+  join actividades ac
+  on c.actividad = ac.id
+  join usuarios p
+  on c.profesor = p.correo
+  join usuarios e
+  on c.calificado = e.correo
+  where c.tipo='estudiante'and c.calificado ='${correo}' and c.grupo='${grupo}'`)
+  .then(calificaciones => {
+  res.send(calificaciones[0])
+}).catch(err => {
+  res.status(400).sendStatus({
+    error: err
+  })
+})
 });
 
 //Get Calificaciones profesor
@@ -28,6 +63,41 @@ router.get('/:id', (req, res) => {
   .catch(err => {
     res.status(400).sendStatus({error: err })
   })
+});
+
+
+router.get('/grupo/:grupo', (req, res) => {
+  let grupo = req.params.grupo;
+  db.sequelize.query(`select i.id,i.tipo,i.equipo nombre,i.actividad,i.profesor,i.correo_profesor,i.nota,i.calificado, rubrica rubrica
+  from (
+    select  
+    rubrica->'calificado'->>'nombre' equipo,* from (select c.id,c.tipo,ac.nombre actividad, p.nombre profesor,
+                            c.profesor correo_profesor,
+    c.nota nota,c.calificado calificado,c.rubrica rubrica from calificaciones c
+    join actividades ac
+    on c.actividad = ac.id
+    join usuarios p
+    on c.profesor = p.correo
+    where c.tipo='equipo' and c.grupo='${grupo}')info
+  )i
+  
+  union all
+  select c.id,c.tipo, e.nombre equipo,ac.nombre actividad, p.nombre profesor,c.profesor correo_profesor,
+  c.nota nota,c.calificado calificado, c.rubrica from calificaciones c
+  join actividades ac
+  on c.actividad = ac.id
+  join usuarios p
+  on c.profesor = p.correo
+  join usuarios e
+  on c.calificado = e.correo
+  where c.tipo='estudiante' and c.grupo='${grupo}'`)
+  .then(calificaciones => {
+  res.send(calificaciones[0])
+}).catch(err => {
+  res.status(400).sendStatus({
+    error: err
+  })
+})
 });
 
 //Get Calificaciones profesor

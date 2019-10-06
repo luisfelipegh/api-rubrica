@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 //Get creador
 router.get('/creador/:creador', (req, res) => {
-    let creator = req.params.usuario;
+    let creator = req.params.creador;
     Actividad.findAll({
       where:{
         creador: creator

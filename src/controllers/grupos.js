@@ -85,6 +85,26 @@ router.get('/profesor/:correo', (req, res) => {
     })
 });
 
+//GET estudiantes 
+router.get('/gruposxestudiante/:estudiante', (req, res) => {
+  let estudiante = req.params.estudiante;
+
+  db.sequelize.query(`
+  select g.codigo, g.nombre, concat(g.nombre,' - ', u.nombre) from estudiantes e
+  join grupos g 
+  on e.grupo = g.codigo
+  join usuarios u on
+  g.profesor = u.correo
+  where estudiante='${estudiante}'`)
+    .then(grupos => {
+    res.send(grupos[0])
+  }).catch(err => {
+    res.status(400).sendStatus({
+      error: err
+    })
+  })
+});
+
 //POST one Grupo
 router.post('/', (req, res) => {
   if (!req.body) {

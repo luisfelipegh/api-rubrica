@@ -4,11 +4,6 @@ const db = require('../db/db');
 var Calificacion = db.sequelize.define(
     'calificaciones',
     {
-        id:{
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
         actividad:{
             type: Sequelize.INTEGER,
             allowNull: false,
@@ -20,6 +15,19 @@ var Calificacion = db.sequelize.define(
         tipo:{
             type: Sequelize.STRING,
             allowNull: false,
+        },
+        nota:{
+            type: Sequelize.FLOAT,
+            allowNull: false,
+        },
+        grupo:{
+            primaryKey: false ,
+            type: Sequelize.STRING,
+            allowNull: false,
+            references: {
+                model: "Grupo",
+                key: "codigo",
+            },
         },
         calificado:{
             type: Sequelize.STRING,
