@@ -16,22 +16,24 @@ router.get('/', (req, res) => {
 router.get('/misCalificaciones/:correo/:grupo', (req, res) => {
   let correo = req.params.correo;
   let grupo = req.params.grupo;
-  db.sequelize.query(`select i.grupo,i.correo,i.tipo ,i.nombre,i.equipo,i.actividad,i.profesor,i.correo_profesor,i.nota,i.calificado, rubrica rubrica
+  db.sequelize.query(`select i.nombre_grupo, i.grupo,i.correo,i.tipo ,i.nombre,i.equipo,i.actividad,i.profesor,i.correo_profesor,i.nota,i.calificado, rubrica rubrica
   from (
     select  json_array_elements(rubrica->'calificacion'->'estudiantesTeam')->>'correo' correo,
     json_array_elements(rubrica->'calificacion'->'estudiantesTeam')->>'nombre' nombre, 
-    rubrica->'calificado'->>'nombre' equipo,* from (select c.tipo,c.grupo,ac.nombre actividad, p.nombre profesor,
+    rubrica->'calificado'->>'nombre' equipo,* from (select g.nombre nombre_grupo, c.tipo,c.grupo,ac.nombre actividad, p.nombre profesor,
                             c.profesor correo_profesor,
     c.nota nota,c.calificado calificado,c.rubrica rubrica from calificaciones c
     join actividades ac
     on c.actividad = ac.id
     join usuarios p
     on c.profesor = p.correo
+    join grupos g 
+    on c.grupo = g.codigo
     where c.tipo='equipo')info
   )i
   where correo ='${correo}' and grupo='${grupo}'
   union all
-  select c.grupo,e.correo, c.tipo,e.nombre,'Individual' equipo,ac.nombre actividad, p.nombre profesor,c.profesor correo_profesor,
+  select g.nombre nombre_grupo,c.grupo,e.correo, c.tipo,e.nombre,'Individual' equipo,ac.nombre actividad, p.nombre profesor,c.profesor correo_profesor,
   c.nota nota,c.calificado calificado, c.rubrica from calificaciones c
   join actividades ac
   on c.actividad = ac.id
@@ -39,6 +41,8 @@ router.get('/misCalificaciones/:correo/:grupo', (req, res) => {
   on c.profesor = p.correo
   join usuarios e
   on c.calificado = e.correo
+  join grupos g 
+  on c.grupo = g.codigo
   where c.tipo='estudiante'and c.calificado ='${correo}' and c.grupo='${grupo}'`)
   .then(calificaciones => {
   res.send(calificaciones[0])
