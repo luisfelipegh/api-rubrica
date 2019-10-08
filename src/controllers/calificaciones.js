@@ -16,11 +16,11 @@ router.get('/', (req, res) => {
 router.get('/misCalificaciones/:correo/:grupo', (req, res) => {
   let correo = req.params.correo;
   let grupo = req.params.grupo;
-  db.sequelize.query(`select i.nombre_grupo, i.grupo,i.correo,i.tipo ,i.nombre,i.equipo,i.actividad,i.profesor,i.correo_profesor,i.nota,i.calificado, rubrica rubrica
+  db.sequelize.query(`select to_char(i.fecha - interval '5 hours' , 'dd-MM-yyyy HH12:MI')fecha, i.nombre_grupo, i.grupo,i.correo,i.tipo ,i.nombre,i.equipo,i.actividad,i.profesor,i.correo_profesor,i.nota,i.calificado, rubrica rubrica
   from (
     select  json_array_elements(rubrica->'calificacion'->'estudiantesTeam')->>'correo' correo,
     json_array_elements(rubrica->'calificacion'->'estudiantesTeam')->>'nombre' nombre, 
-    rubrica->'calificado'->>'nombre' equipo,* from (select g.nombre nombre_grupo, c.tipo,c.grupo,ac.nombre actividad, p.nombre profesor,
+    rubrica->'calificado'->>'nombre' equipo,* from (select c.fecha,g.nombre nombre_grupo, c.tipo,c.grupo,ac.nombre actividad, p.nombre profesor,
                             c.profesor correo_profesor,
     c.nota nota,c.calificado calificado,c.rubrica rubrica from calificaciones c
     join actividades ac
@@ -33,7 +33,7 @@ router.get('/misCalificaciones/:correo/:grupo', (req, res) => {
   )i
   where correo ='${correo}' and grupo='${grupo}'
   union all
-  select g.nombre nombre_grupo,c.grupo,e.correo, c.tipo,e.nombre,'Individual' equipo,ac.nombre actividad, p.nombre profesor,c.profesor correo_profesor,
+  select to_char(c.fecha - interval '5 hours' , 'dd-MM-yyyy HH12:MI')fecha,g.nombre nombre_grupo,c.grupo,e.correo, c.tipo,e.nombre,'Individual' equipo,ac.nombre actividad, p.nombre profesor,c.profesor correo_profesor,
   c.nota nota,c.calificado calificado, c.rubrica from calificaciones c
   join actividades ac
   on c.actividad = ac.id
@@ -72,10 +72,10 @@ router.get('/:id', (req, res) => {
 
 router.get('/grupo/:grupo', (req, res) => {
   let grupo = req.params.grupo;
-  db.sequelize.query(`select i.id,i.tipo,i.equipo nombre,i.actividad,i.profesor,i.correo_profesor,i.nota,i.calificado, rubrica rubrica
+  db.sequelize.query(`select to_char(i.fecha - interval '5 hours' , 'dd-MM-yyyy HH12:MI') fecha,i.id,i.tipo,i.equipo nombre,i.actividad,i.profesor,i.correo_profesor,i.nota,i.calificado, rubrica rubrica
   from (
     select  
-    rubrica->'calificado'->>'nombre' equipo,* from (select c.id,c.tipo,ac.nombre actividad, p.nombre profesor,
+    rubrica->'calificado'->>'nombre' equipo,* from (select c.fecha,c.id,c.tipo,ac.nombre actividad, p.nombre profesor,
                             c.profesor correo_profesor,
     c.nota nota,c.calificado calificado,c.rubrica rubrica from calificaciones c
     join actividades ac
@@ -86,7 +86,7 @@ router.get('/grupo/:grupo', (req, res) => {
   )i
   
   union all
-  select c.id,c.tipo, e.nombre equipo,ac.nombre actividad, p.nombre profesor,c.profesor correo_profesor,
+  select to_char(c.fecha - interval '5 hours' , 'dd-MM-yyyy HH12:MI')  fecha,c.id,c.tipo, e.nombre equipo,ac.nombre actividad, p.nombre profesor,c.profesor correo_profesor,
   c.nota nota,c.calificado calificado, c.rubrica from calificaciones c
   join actividades ac
   on c.actividad = ac.id
